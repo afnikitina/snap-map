@@ -30,7 +30,7 @@ removeProperty(users, prop2);
 */
 
 // this version uses an array of maps
-
+/*
 const objToMap = ( obj => {
 	const mp = new Map;
 	Object.keys ( obj ). forEach (k => { mp.set(k, obj[k]) });
@@ -74,4 +74,61 @@ mapArr.sort((a,b) => a.get(prop1) > b.get(prop1));
 for (let i = 0; i < arrSize; i++ ) {
 	console.log(mapArr[i]);
 }
+*/
 
+// createa a map from an array of maps
+
+// objecto to map
+const objToMap = ( obj => {
+	const mp = new Map;
+	Object.keys ( obj ). forEach (k => { mp.set(k, obj[k]) });
+	return mp;
+});
+
+// array of objects to array of maps
+const arrOfMaps = ( arr => {
+	const len = arr.length;
+	const newArr = [];
+	for (let i = 0; i < len; i++ ) {
+		newArr.push(objToMap(arr[i]));
+	}
+	return newArr;
+});
+
+// array of maps to map
+mapArr = arrOfMaps(users);
+const arrSize = mapArr.length;
+
+const userMap = new Map();
+/*
+for (let i = 0; i < arrSize; i++ ) {
+	userMap.set(mapArr[i], mapArr[i].get(prop1));
+}
+*/
+// check if that works
+mapArr.forEach(user => userMap.set(user.get(prop1), user));
+console.log(userMap);
+
+// remove address
+for (let u of userMap.values()) {
+	if (u.has(prop2)) {
+		u.delete(prop2);
+	}
+	console.log(u);
+}
+
+// sort by email
+const emails = Array.from(userMap.keys());
+
+emails.sort((a,b) => a > b);
+console.log(emails);
+
+const sortedArr = [];
+const newLen = emails.length;
+
+for (let i = 0; i < newLen; i++ ) {
+	sortedArr.push(userMap.get(emails[i]));
+}
+
+// check if that works
+console.log(sortedArr);
